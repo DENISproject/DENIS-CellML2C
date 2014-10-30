@@ -14,6 +14,13 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
+
+	if(argc<3){
+        	cout << "Invalid number of input arguments" << endl << endl;
+		cout << "     cellm2c <cellml_file> <output_c_file>" << endl << endl;
+		return -1;
+	}
+
         const size_t cSize = strlen(argv[1])+1;
         wchar_t* wc = new wchar_t[cSize];
         mbstowcs (wc, argv[1], cSize);
