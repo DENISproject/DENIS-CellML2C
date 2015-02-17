@@ -28,14 +28,20 @@ int main(int argc, char **argv)
   
 	
 	CellMLBootstrap* bootstrap = CreateCellMLBootstrap();
+        cout << "Bootstrap created" << endl;
 	DOMModelLoader* ml = bootstrap->modelLoader();
+        cout << "ModelLoader created" << endl;
 	Model* model = ml->loadFromURL(wide);
+	cout << "Model loaded from URL" << endl;
 
 	CeLEDSExporterBootstrap* celedsexporterb = CreateCeLEDSExporterBootstrap();
+        cout << "CeLEDSExproterBootestrap created" << endl;
 
 	CodeExporter* ce = celedsexporterb->createExporter(L"C.xml");
+        cout << "Exporter created" << endl;
 
 	wstring code = ce->generateCode(model);
+	cout << "Code generated" << endl;
 
 	wofstream wofs(argv[2]);
         wofs << code;
