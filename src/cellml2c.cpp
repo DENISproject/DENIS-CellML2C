@@ -21,23 +21,27 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+        string executable = argv[0];
+        string formatPath = executable.substr(0, executable.find_last_of("/")+1) + "C.xml";
+	wstring wsFormatPath(formatPath.begin(), formatPath.end());
+
         const size_t cSize = strlen(argv[1])+1;
         wchar_t* wc = new wchar_t[cSize];
         mbstowcs (wc, argv[1], cSize);
-        wstring wide(wc);	
+        wstring wsURL(wc);	
   
 	
 	CellMLBootstrap* bootstrap = CreateCellMLBootstrap();
         cout << "Bootstrap created" << endl;
 	DOMModelLoader* ml = bootstrap->modelLoader();
         cout << "ModelLoader created" << endl;
-	Model* model = ml->loadFromURL(wide);
+	Model* model = ml->loadFromURL(wsURL);
 	cout << "Model loaded from URL" << endl;
 
 	CeLEDSExporterBootstrap* celedsexporterb = CreateCeLEDSExporterBootstrap();
         cout << "CeLEDSExproterBootestrap created" << endl;
 
-	CodeExporter* ce = celedsexporterb->createExporter(L"C.xml");
+	CodeExporter* ce = celedsexporterb->createExporter(wsFormatPath);
         cout << "Exporter created" << endl;
 
 	wstring code = ce->generateCode(model);
