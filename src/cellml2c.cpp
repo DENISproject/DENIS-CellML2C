@@ -51,9 +51,9 @@ using namespace std;
 int main(int argc, char **argv)
 {
 
-	if(argc<3){
+	if(argc<4){
         	cout << "Invalid number of input arguments" << endl << endl;
-		cout << "     cellm2c <cellml_file> <output_c_file>" << endl << endl;
+		cout << "     cellm2c <cellml_file> <output_c_file> <name_space>" << endl << endl;
 		return -1;
 	}
 
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 	cout << "Code generated" << endl;
 
 	wofstream wofs(argv[2]);
-        wofs << code;
+        wofs << "namespace " << argv[3] << "{" << endl << code << endl <<"}";
 
 	cout << "File " << argv[2] << " created." <<endl;
 	return 0;
