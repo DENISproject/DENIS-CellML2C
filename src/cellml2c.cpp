@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 	cout << "Code generated" << endl;
 
 	wofstream wofs(argv[2]);
-        wofs << "namespace " << argv[3] << "{" << endl << code << endl <<"}";
+        wofs << "static const struct{ " << endl << code << endl << "}" << argv[3] <<";";
 
 	cout << "File " << argv[2] << " created." <<endl;
 	return 0;
