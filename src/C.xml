@@ -206,7 +206,7 @@ double* states, double* algebraic, int* pret)
 //==============================================================================
 
 // Save in the inputs the number of elements in the vectors.
-void vectorsLength(int* algebraicLength, int* statesLength, int* constantsLength){
+void (* vectorsLength)(int* algebraicLength, int* statesLength, int* constantsLength){
     *algebraicLength = </mapping>
 <mapping keyname="postAlgebraicCount">;</mapping>
 <mapping keyname="preStateCount">
@@ -219,21 +219,21 @@ void vectorsLength(int* algebraicLength, int* statesLength, int* constantsLength
 <mapping keyname="preInitConsts">
 
 //
-void initConsts(double* constants, double* rates, double *states)
+void (* initConsts)(double* constants, double* rates, double *states)
 {
 </mapping>
 <mapping keyname="postInitConsts">
 }
 
 </mapping>
-<mapping keyname="preRates">void computeRates(double VoI, double* constants, double* rates, double* states, double* algebraic)
+<mapping keyname="preRates">void (* computeRates)(double VoI, double* constants, double* rates, double* states, double* algebraic)
 {
 </mapping><mapping keyname="postRates">
 }
 
 </mapping>
 
-<mapping keyname="preVariables">void computeVariables(double VoI, double* constants, double* rates, double* states, double* algebraic)
+<mapping keyname="preVariables">void (* computeVariables)(double VoI, double* constants, double* rates, double* states, double* algebraic)
 {
 </mapping> <mapping keyname="postVariables">
 }
@@ -243,7 +243,7 @@ void initConsts(double* constants, double* rates, double *states)
 </mapping>
   <mapping keyname="endSection">//==========================================================
 </mapping>
-  <mapping keyname="preVarList">void names(const char* &amp;VoI, const char** constants, const char** rates, const char** states, const char** algebraic){
+  <mapping keyname="preVarList">void (* names)(const char* &amp;VoI, const char** constants, const char** rates, const char** states, const char** algebraic){
 </mapping>
   <mapping keyname="postVarList"> }
 </mapping>
