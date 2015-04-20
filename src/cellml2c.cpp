@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 
 	if(argc<4){
         	cout << "Invalid number of input arguments" << endl << endl;
-		cout << "     cellm2c <cellml_file> <output_c_file> <name_space>" << endl << endl;
+		cout << "     cellm2c <cellml_file> <output_c_file> <struct_name>" << endl << endl;
 		return -1;
 	}
 
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 	cout << "Code generated" << endl;
 
 	wofstream wofs(argv[2]);
-        wofs << "static const struct{ " << endl << code << endl << "}" << argv[3] <<";";
+        wofs << "static const struct " << argv[3] << "{ " << endl << code << endl << "};";
 
 	cout << "File " << argv[2] << " created." <<endl;
 	return 0;
