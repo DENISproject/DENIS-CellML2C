@@ -35,6 +35,7 @@
  ===========================================================================*/
 
 #include "cellml2c.h"
+#include <dirent.h>
 
 using namespace iface::cellml_api;
 using namespace iface::cellml_services;
@@ -44,22 +45,56 @@ using namespace std;
 int main(int argc, char **argv)
 {
 
-	if(argc<4){
+	if(argc!=3){
 		cout << "Invalid number of input arguments" << endl << endl;
-		cout << "	 cellm2c <cellml_file> <output_path> <output_prefix>" << endl << endl;
+		cout << "	 cellm2c <input_path> <output_path>" << endl << endl;
 		return -1;
 	}
-
-	wstring wsFormatPath = getFormatPath(argv[0]);
-	wstring wsURL = getModelUrL(argv[1]);	
-	char *file = getFile(argv[2],argv[3]);
-	wstring wsPrefix = getModelPrefix(argv[3]);	
 	
-	wstring code = getCode(wsURL, wsFormatPath);
-
-	code = insertPrefixInCode(code, wsPrefix);
-
-	saveModel(file,code);
+	
+	wstring wsFormatPath = getFormatPath(argv[0]);
+	wstring wsURL = getModelUrL(argv[1]);
+	
+	
+	DIR *dir;
+	struct dirent *ent;
+	wstring wsDirCommand = wsURL;
+    string sDirCommand(wsDirCommand.begin(), wsDirCommand.end());
+	cellmlFilesList * fileList = NULL;
+    
+	if ((dir = opendir(sDirCommand.c_str())) != NULL) {
+		while ((ent = readdir (dir)) != NULL) {
+			string cellMLFileName=getCellMLFileName(ent->d_name);
+			
+			if(strcmp("",cellMLFileName.c_str())!=0){
+				
+				cellmlFilesList * newFile = new cellmlFilesList();
+				newFile->name = cellMLFileName;
+				newFile->next = fileList;
+				fileList = newFile;
+				
+				printf ("%s\n", cellMLFileName.c_str());
+				wstring fileCellML = getFileWstring(cellMLFileName.c_str());
+				wstring code = getCode(wsURL+L"/"+fileCellML+L".cellml", wsFormatPath);
+				saveModel((string(argv[2])+"/models/"+cellMLFileName+".h").c_str(),code,fileCellML);
+			}
+		}
+		closedir (dir);
+	}
+	else {
+		/* could not open directory */
+		cout << "Error to open dir " << sDirCommand << endl;
+		return EXIT_FAILURE;
+	}
+	
+	int i=0;
+	cellmlFilesList *iterator=fileList;
+	while(iterator!=NULL){
+		cout << ++i << ") File " << iterator->name << endl;
+		iterator=iterator->next;
+	}
+	
+	createModelsHeader(fileList,string(argv[2]));
 	
 	return 0;
 }

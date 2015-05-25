@@ -92,9 +92,9 @@
   <ccgs:mapping keyname="rateNamePattern">rates[%]</ccgs:mapping>
   <ccgs:mapping keyname="voiPattern">VoI</ccgs:mapping>
   <ccgs:mapping keyname="arrayOffset">0</ccgs:mapping>
-  <ccgs:mapping keyname="assignPattern">&lt;LHS&gt; = &lt;RHS&gt;;
+  <ccgs:mapping keyname="assignPattern">		&lt;LHS&gt; = &lt;RHS&gt;;
 </ccgs:mapping>
-  <ccgs:mapping keyname="assignConstantPattern">&lt;LHS&gt; = &lt;RHS&gt;;
+  <ccgs:mapping keyname="assignConstantPattern">		&lt;LHS&gt; = &lt;RHS&gt;;
 </ccgs:mapping>
   <ccgs:mapping keyname="solvePattern"><![CDATA[rootfind_<ID>(VoI, constants, rates, states, algebraic, pret);
 <SUP>
@@ -185,71 +185,60 @@ double* states, double* algebraic, int* pret)
 
 <dictionary>
 <mapping keyname="preAlgebraicCount">
-//==============================================================================
-//
-//                                  DENIS Project 
-//
-//------------------------------------------------------------------------------
-//
-//  -- C File created for the DENIS Project --
-//
-// This file has been automatically created using the CellML API and a CellML
-// file to construct a BOINC program.
-//
-//------------------------------------------------------------------------------
-//
-//                                                        San Jorge University
-//                                                       School of Engineering
-//
-//                                                           http://eps.usj.es
-//
-//==============================================================================
+	#define ALGEBRAIC_LENGTH </mapping>
+<mapping keyname="postAlgebraicCount">
+</mapping>
+<mapping keyname="preStateCount">	#define STATE_LENGTH </mapping>
+<mapping keyname="postStateCount">
+</mapping>
+<mapping keyname="preConstantCount">	#define CONSTANT_LENGTH </mapping>
+<mapping keyname="postConstantCount"> 
 
-// Save in the inputs the number of elements in the vectors.
-void vectorsLength(int* algebraicLength, int* statesLength, int* constantsLength){
-    *algebraicLength = </mapping>
-<mapping keyname="postAlgebraicCount">;</mapping>
-<mapping keyname="preStateCount">
-    *statesLength    = </mapping><mapping keyname="postStateCount">;</mapping>
-<mapping keyname="preConstantCount">
-    *constantsLength = </mapping><mapping keyname="postConstantCount">; 
-}
+	double* getConstantsArray(){return new double[CONSTANT_LENGTH];}
+	double* getRatesArray(){return new double[STATE_LENGTH];}
+	double* getStatesArray(){return new double[STATE_LENGTH];}
+	double* getAlgebraicArray(){return new double[ALGEBRAIC_LENGTH];}
+	
+	void getArrays(double **constants, double **rates, double **states, double **algebraic){
+		*constants = getConstantsArray();
+		*rates     = getRatesArray();
+		*states    = getStatesArray();
+		*algebraic = getAlgebraicArray();
+	}
+	
+	void vectorsLength(int* algebraicLength, int* statesLength, int* constantsLength){
+		*algebraicLength = ALGEBRAIC_LENGTH;
+		*statesLength = STATE_LENGTH;
+		*constantsLength = CONSTANT_LENGTH;
+	}
+	
 </mapping>
 
 <mapping keyname="preInitConsts">
-
-//
-void initConsts(double* constants, double* rates, double *states)
-{
+	void initConsts(double* constants, double* states){
 </mapping>
-<mapping keyname="postInitConsts">
-}
+<mapping keyname="postInitConsts">	}
 
 </mapping>
-<mapping keyname="preRates">void computeRates(double VoI, double* constants, double* rates, double* states, double* algebraic)
-{
-</mapping><mapping keyname="postRates">
-}
+<mapping keyname="preRates">	void computeRates(double VoI, double* constants, double* rates, double* states, double* algebraic){
+</mapping><mapping keyname="postRates">	}
 
 </mapping>
-
-<mapping keyname="preVariables">void computeVariables(double VoI, double* constants, double* rates, double* states, double* algebraic)
-{
-</mapping> <mapping keyname="postVariables">
-}
-
+<mapping keyname="preVariables">	void computeVariables(double VoI, double* constants, double* rates, double* states, double* algebraic){
+</mapping> <mapping keyname="postVariables">	}
 </mapping>
-  <mapping keyname="topSection">
+<mapping keyname="topSection"></mapping>
+<mapping keyname="endSection"></mapping>
+<mapping keyname="preVarList">	void names(const char* &amp;VoI, const char** constants, const char** rates, const char** states, const char** algebraic){
 </mapping>
-  <mapping keyname="endSection">//==========================================================
+  <mapping keyname="postVarList">	}
 </mapping>
-  <mapping keyname="preVarList">void names(const char* &amp;VoI, const char** constants, const char** rates, const char** states, const char** algebraic){
-</mapping>
-  <mapping keyname="postVarList"> }
-</mapping>
-  <mapping keyname="varListA">  </mapping>
-  <mapping keyname="varListB">  = "</mapping>
-  <mapping keyname="varListC">";</mapping>
+<mapping keyname="varListA">		</mapping>
+<mapping keyname="varListB">  = "</mapping>
+<mapping keyname="varListC">";</mapping>
+<mapping keyname="variablesA">	</mapping>
+<mapping keyname="variablesB">  = "</mapping>
+<mapping keyname="variablesC">";</mapping>
 </dictionary>
 
 </language>
