@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 				printf ("%s\n", cellMLFileName.c_str());
 				wstring fileCellML = getFileWstring(cellMLFileName.c_str());
 				wstring code = getCode(wsURL+L"/"+fileCellML+L".cellml", wsFormatPath);
-				saveModel((string(argv[2])+"/models/"+cellMLFileName+".h").c_str(),code,fileCellML);
+				saveModel((string(argv[2])+"/"+cellMLFileName+".h").c_str(),code,fileCellML);
 			}
 		}
 		closedir (dir);

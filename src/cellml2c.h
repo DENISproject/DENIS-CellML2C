@@ -199,7 +199,7 @@ void printIncludes(ofstream &ofs,cellmlFilesList* list)
 	cellmlFilesList* iterator=list;
 	int i=0;
 	while(iterator!=NULL){
-		ofs << "#include \"models/" << iterator->name << ".h\"" << endl;
+		ofs << "#include \"" << iterator->name << ".h\"" << endl;
 		iterator=iterator->next;
 	}
 	
@@ -214,7 +214,8 @@ void printGetModelID(ofstream &ofs,cellmlFilesList* list)
 	ofs << "int getModelId(const char* modelName){" << endl;
 	
 	while(iterator!=NULL){
-		ofs << "\tif(strcmp(modelName, \"" << iterator->name << "\")==0) return " << iterator->name << "_ID;" << endl;
+		ofs << "\tif(strcmp(modelName, \"" << iterator->name << "\")==0)" <<endl;
+		ofs << "\t\treturn " << iterator->name << "_ID;" << endl;
 		iterator=iterator->next;
 	}
 	ofs << "}" << endl;
@@ -222,19 +223,62 @@ void printGetModelID(ofstream &ofs,cellmlFilesList* list)
 	
 }
 
-void printFunction(ofstream &ofs,string functionName, string functionParameters, cellmlFilesList* list)
+void printFunction(ofstream &ofs, string functionType,string functionName, string functionParameters, cellmlFilesList* list)
 {
+	cellmlFilesList* iterator=list;
+	int i=0;
+	
+	ofs << functionType << " " << functionName << "(int modelId";
+	if(functionParameters.length()>0)
+		ofs << ", ";
+	ofs << functionParameters << "){" <<endl;
+	ofs << "\tswitch(modelid){"<<endl;
+	while(iterator!=NULL){
+		ofs << "\tcase " << iterator->name <<"_ID:" <<endl;
+		ofs << "\t\treturn " <<iterator->name << "::" << functionName << "(" << functionParameters << ");" <<endl;
+		iterator=iterator->next;
+	}
+	
+	ofs << "\t}" << endl;
+	ofs << "}" << endl;
+	ofs << endl;
 	
 }
 	
 void createModelsHeader(cellmlFilesList* list, string path)
 {
-	ofstream ofs((path+"/models.h").c_str());
+	ofstream ofsh((path+"/models.h").c_str());
 	
-	printIncludes(ofs, list);
-	printID(ofs, list);
-	printGetModelID(ofs, list);
+	printIncludes(ofsh, list);
+	printID(ofsh, list);
+	ofsh << "int getModelId(const char* modelName);" << endl << endl;
+	ofsh << "double* getConstantsArray();" << endl;
+	ofsh << "double* getRatesArray();" << endl;
+	ofsh << "double* getStatesArray();" << endl;
+	ofsh << "double* getAlgebraicArray();" << endl << endl;
+	ofsh << "void getArrays(int modelId, double **constants, double **rates, double **states, double **algebraic):" << endl;
+	ofsh << "void vectorsLength(int modelId, int* algebraicLength, int* statesLength, int* constantsLength);" << endl;
+	ofsh << "void names(int modelId, const char* &VoI, const char** constants, const char** rates, const char** states, const char** algebraic);" << endl;
+	ofsh << "void initConsts(int modelId, double* constants, double* states);" << endl;
+	ofsh << "void computeRates(int modelId, double VoI, double* constants, double* rates, double* states, double* algebraic);" << endl;
+	ofsh << "void computeVariables(int modelId, double VoI, double* constants, double* rates, double* states, double* algebraic);" << endl;
+	
+	ofsh.close();
 	
 	
-	ofs.close();
+	ofstream ofscpp((path+"/models.cpp").c_str());
+	
+	printGetModelID(ofscpp, list);
+	printFunction(ofscpp,"double*", "getConstantsArray", "", list);
+	printFunction(ofscpp,"double*", "getRatesArray", "", list);
+	printFunction(ofscpp,"double*", "getStatesArray", "", list);
+	printFunction(ofscpp,"double*", "getAlgebraicArray", "", list);
+	printFunction(ofscpp,"void", "getArrays", "double **constants, double **rates, double **states, double **algebraic", list);
+	printFunction(ofscpp,"void", "vectorsLength", "int* algebraicLength, int* statesLength, int* constantsLength", list);
+	printFunction(ofscpp,"void", "names", "const char* &VoI, const char** constants, const char** rates, const char** states, const char** algebraic", list);
+	printFunction(ofscpp,"void", "initConsts", "double* constants, double* states", list);
+	printFunction(ofscpp,"void", "computeRates", "double VoI, double* constants, double* rates, double* states, double* algebraic", list);
+	printFunction(ofscpp,"void", "computeVariables", "double VoI, double* constants, double* rates, double* states, double* algebraic", list);
+
+	ofscpp.close();
 }
