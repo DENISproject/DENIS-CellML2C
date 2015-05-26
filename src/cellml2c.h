@@ -110,7 +110,46 @@ char *getFile(char* outputPath,char* prefix){
 	return file;
 }
 
-void printCommentHeader(wofstream &wofs, wstring prefix)
+void printCommentHeaderMainFile(ofstream &ofs)
+{
+	ofs << "//==============================================================================" << endl;
+	ofs << "//                                                                              " << endl;
+	ofs << "//                                  DENIS Project                               " << endl;
+	ofs << "//                                                                              " << endl;
+	ofs << "//------------------------------------------------------------------------------" << endl;
+	ofs << "//                                                                              " << endl;
+	ofs << "//   -- C Models Header created for the DENIS Project --                        " << endl;
+	ofs << "//                                                                              " << endl;
+	ofs << "// This file has been automatically created using the CellML API.               " << endl;
+	ofs << "//                                                                              " << endl;
+	ofs << "//------------------------------------------------------------------------------" << endl;
+	ofs << "//                                                                              " << endl;
+   	ofs << "// DENIS-CellML2C Copyright 2015 J. Carro; J. Castro                            " << endl;
+	ofs << "//                                                                              " << endl;
+  	ofs << "// Licensed under the Apache License, Version 2.0 (the \"License\");            " << endl;
+  	ofs << "// you may not use this file except in compliance with the License.             " << endl;
+  	ofs << "// You may obtain a copy of the License at                                      " << endl;
+	ofs << "//                                                                              " << endl;
+	ofs << "// http://www.apache.org/licenses/LICENSE-2.0                                   " << endl;
+	ofs << "//                                                                              " << endl;
+  	ofs << "// Unless required by applicable law or agreed to in writing, software          " << endl;
+  	ofs << "// distributed under the License is distributed on an \"AS IS\" BASIS,          " << endl;
+  	ofs << "// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.     " << endl;
+  	ofs << "// See the License for the specific language governing permissions and          " << endl;
+  	ofs << "// limitations under the License.                                               " << endl;
+	ofs << "//                                                                              " << endl;
+	ofs << "//------------------------------------------------------------------------------" << endl;
+	ofs << "//                                                                              " << endl;
+	ofs << "//                                                        San Jorge University  " << endl;
+	ofs << "//                                                       School of Engineering  " << endl;
+	ofs << "//                                                                              " << endl;
+	ofs << "//                                                           http://eps.usj.es  " << endl;
+	ofs << "//                                                                              " << endl;
+	ofs << "//==============================================================================" << endl;
+	ofs << endl;
+}
+
+void printCommentHeaderIndividualFile(wofstream &wofs, wstring prefix)
 {
 	wofs << "//==============================================================================" << endl;
 	wofs << "//                                                                              " << endl;
@@ -147,15 +186,17 @@ void printCommentHeader(wofstream &wofs, wstring prefix)
 	wofs << "//                                                                              " << endl;
 	wofs << "//==============================================================================" << endl;
 	wofs << endl;
+	wofs << "using namespace std;" << endl;
+	wofs << endl;
 }
 
 void saveModel(const char* file, wstring code, wstring prefix){
 	cout << file << endl;
 	wofstream wofs(file);
-	printCommentHeader(wofs, prefix);
+	printCommentHeaderIndividualFile(wofs, prefix);
 	wofs << "namespace " << prefix << "{" << endl;
 	wofs << code << endl;
-	wofs << "}" << endl;
+	wofs << "};" << endl;
 	
 	wofs.close();
 	wcout << "File " << file << " created." <<endl;
@@ -223,7 +264,7 @@ void printGetModelID(ofstream &ofs,cellmlFilesList* list)
 	
 }
 
-void printFunction(ofstream &ofs, string functionType,string functionName, string functionParameters, cellmlFilesList* list)
+void printFunction(ofstream &ofs, string functionType,string functionName, string functionParameters, string paramtersNames, cellmlFilesList* list)
 {
 	cellmlFilesList* iterator=list;
 	int i=0;
@@ -232,10 +273,10 @@ void printFunction(ofstream &ofs, string functionType,string functionName, strin
 	if(functionParameters.length()>0)
 		ofs << ", ";
 	ofs << functionParameters << "){" <<endl;
-	ofs << "\tswitch(modelid){"<<endl;
+	ofs << "\tswitch(modelId){"<<endl;
 	while(iterator!=NULL){
 		ofs << "\tcase " << iterator->name <<"_ID:" <<endl;
-		ofs << "\t\treturn " <<iterator->name << "::" << functionName << "(" << functionParameters << ");" <<endl;
+		ofs << "\t\treturn " <<iterator->name << "::" << functionName << "(" << paramtersNames << ");" <<endl;
 		iterator=iterator->next;
 	}
 	
@@ -249,36 +290,31 @@ void createModelsHeader(cellmlFilesList* list, string path)
 {
 	ofstream ofsh((path+"/models.h").c_str());
 	
+	printCommentHeaderMainFile(ofsh);
 	printIncludes(ofsh, list);
 	printID(ofsh, list);
-	ofsh << "int getModelId(const char* modelName);" << endl << endl;
-	ofsh << "double* getConstantsArray();" << endl;
-	ofsh << "double* getRatesArray();" << endl;
-	ofsh << "double* getStatesArray();" << endl;
-	ofsh << "double* getAlgebraicArray();" << endl << endl;
-	ofsh << "void getArrays(int modelId, double **constants, double **rates, double **states, double **algebraic):" << endl;
-	ofsh << "void vectorsLength(int modelId, int* algebraicLength, int* statesLength, int* constantsLength);" << endl;
-	ofsh << "void names(int modelId, const char* &VoI, const char** constants, const char** rates, const char** states, const char** algebraic);" << endl;
-	ofsh << "void initConsts(int modelId, double* constants, double* states);" << endl;
-	ofsh << "void computeRates(int modelId, double VoI, double* constants, double* rates, double* states, double* algebraic);" << endl;
-	ofsh << "void computeVariables(int modelId, double VoI, double* constants, double* rates, double* states, double* algebraic);" << endl;
-	
-	ofsh.close();
-	
-	
-	ofstream ofscpp((path+"/models.cpp").c_str());
-	
-	printGetModelID(ofscpp, list);
-	printFunction(ofscpp,"double*", "getConstantsArray", "", list);
-	printFunction(ofscpp,"double*", "getRatesArray", "", list);
-	printFunction(ofscpp,"double*", "getStatesArray", "", list);
-	printFunction(ofscpp,"double*", "getAlgebraicArray", "", list);
-	printFunction(ofscpp,"void", "getArrays", "double **constants, double **rates, double **states, double **algebraic", list);
-	printFunction(ofscpp,"void", "vectorsLength", "int* algebraicLength, int* statesLength, int* constantsLength", list);
-	printFunction(ofscpp,"void", "names", "const char* &VoI, const char** constants, const char** rates, const char** states, const char** algebraic", list);
-	printFunction(ofscpp,"void", "initConsts", "double* constants, double* states", list);
-	printFunction(ofscpp,"void", "computeRates", "double VoI, double* constants, double* rates, double* states, double* algebraic", list);
-	printFunction(ofscpp,"void", "computeVariables", "double VoI, double* constants, double* rates, double* states, double* algebraic", list);
 
-	ofscpp.close();
+	printGetModelID(ofsh, list);
+	printFunction(ofsh,"int", "getNameId", "const char* variable, const char* component, const char** names, int namesLength",
+		"variable, component, names, namesLength", list);
+	
+	printFunction(ofsh,"double*", "getNewRatesArray", "", "", list);
+	printFunction(ofsh,"double*", "getNewStatesArray", "", "", list);
+	printFunction(ofsh,"double*", "getNewAlgebraicArray", "", "", list);
+	printFunction(ofsh,"double*", "getNewConstantsArray", "", "", list);
+	
+	printFunction(ofsh,"void", "getNewArrays", "double **constants, double **rates, double **states, double **algebraic", 
+		"constants, rates, states, algebraic", list);
+	printFunction(ofsh,"void", "getVectorsLength", "int* algebraicLength, int* statesLength, int* constantsLength", 
+		"algebraicLength, statesLength, constantsLength", list);
+	printFunction(ofsh,"void", "names", "const char* &VoI, const char** constants, const char** rates, const char** states, const char** algebraic", 
+		"VoI, constants, rates, states, algebraic", list);
+	printFunction(ofsh,"void", "initConsts", "double* constants, double* states", 
+		"constants, states", list);
+	printFunction(ofsh,"void", "computeRates", "double VoI, double* constants, double* rates, double* states, double* algebraic", 
+		"VoI, constants, rates, states, algebraic", list);
+	printFunction(ofsh,"void", "computeVariables", "double VoI, double* constants, double* rates, double* states, double* algebraic", 
+		"VoI, constants, rates, states, algebraic", list);
+
+	ofsh.close();
 }

@@ -194,24 +194,39 @@ double* states, double* algebraic, int* pret)
 <mapping keyname="preConstantCount">	#define CONSTANT_LENGTH </mapping>
 <mapping keyname="postConstantCount"> 
 
-	double* getConstantsArray(){return new double[CONSTANT_LENGTH];}
-	double* getRatesArray(){return new double[STATE_LENGTH];}
-	double* getStatesArray(){return new double[STATE_LENGTH];}
-	double* getAlgebraicArray(){return new double[ALGEBRAIC_LENGTH];}
+	double* getNewConstantsArray(){return new double[CONSTANT_LENGTH];}
+	double* getNewRatesArray(){return new double[STATE_LENGTH];}
+	double* getNewStatesArray(){return new double[STATE_LENGTH];}
+	double* getNewAlgebraicArray(){return new double[ALGEBRAIC_LENGTH];}
 	
-	void getArrays(double **constants, double **rates, double **states, double **algebraic){
-		*constants = getConstantsArray();
-		*rates     = getRatesArray();
-		*states    = getStatesArray();
-		*algebraic = getAlgebraicArray();
+	void getNewArrays(double **constants, double **rates, double **states, double **algebraic){
+		*constants = getNewConstantsArray();
+		*rates     = getNewRatesArray();
+		*states    = getNewStatesArray();
+		*algebraic = getNewAlgebraicArray();
 	}
 	
-	void vectorsLength(int* algebraicLength, int* statesLength, int* constantsLength){
+	void getVectorsLength(int* algebraicLength, int* statesLength, int* constantsLength){
 		*algebraicLength = ALGEBRAIC_LENGTH;
 		*statesLength = STATE_LENGTH;
 		*constantsLength = CONSTANT_LENGTH;
 	}
 	
+	int getNameId(const char* variable, const char* component, const char** names, int namesLength){
+		int index = -1;
+		string completName(variable);
+		completName += " in component ";
+		completName += component;
+		for(int i=0; i &lt; namesLength; i++){
+			if(strncmp(completName.c_str(), names[i], completName.length())==0){
+				index = i;
+				break;
+			}
+		}
+		
+		return index;
+	}
+		
 </mapping>
 
 <mapping keyname="preInitConsts">
