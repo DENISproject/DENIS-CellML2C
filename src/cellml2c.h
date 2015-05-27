@@ -12,7 +12,7 @@
  -----------------------------------------------------------------------
 
                                                   San Jorge University
-				                                 School of Engineering
+                                                 School of Engineering
 
                                                      http://eps.usj.es
 
