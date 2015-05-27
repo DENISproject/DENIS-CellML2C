@@ -152,7 +152,7 @@ void printCommentHeaderMainFile(ofstream &ofs)
 	ofs << "                                                                        " << endl;
 	ofs << "                                                     http://eps.usj.es  " << endl;
 	ofs << "                                                                        " << endl;
-	ofs << "======================================================================/*" << endl;
+	ofs << "======================================================================*/" << endl;
 	ofs << endl;
 }
 
@@ -198,7 +198,7 @@ void printCommentHeaderIndividualFile(wofstream &wofs, wstring prefix)
 	wofs << "                                                                        " << endl;
 	wofs << "                                                     http://eps.usj.es  " << endl;
 	wofs << "                                                                        " << endl;
-	wofs << "======================================================================/*" << endl;
+	wofs << "======================================================================*/" << endl;
 	wofs << endl;
 	wofs << "using namespace std;" << endl;
 	wofs << endl;
