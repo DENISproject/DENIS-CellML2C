@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 	if(argc!=3){
 		cout << "Invalid number of input arguments" << endl << endl;
 		cout << "	 cellm2c <input_path> <output_path>" << endl << endl;
-		return -1;
+		return EXIT_FAILURE;
 	}
 	
 	

@@ -265,7 +265,7 @@ void printGetModelID(ofstream &ofs,cellmlFilesList* list)
 	
 }
 
-void printFunction(ofstream &ofs, string functionType,string functionName, string functionParameters, string paramtersNames, cellmlFilesList* list)
+void printFunction(ofstream &ofs, string functionType,string functionName, string functionParameters, string paramtersNames, string errOut, cellmlFilesList* list)
 {
 	cellmlFilesList* iterator=list;
 	int i=0;
@@ -282,6 +282,8 @@ void printFunction(ofstream &ofs, string functionType,string functionName, strin
 	}
 	ofs << "\tdefault:" << endl;
 	ofs << "\t\tfprintf(stderr, \"Model not implemented\\n\");" << endl;
+	if(errOut.length()>0)
+		ofs << "\t\treturn " << errOut << ";" << endl;
 	
 	ofs << "\t}" << endl;
 	ofs << "}" << endl;
@@ -299,25 +301,25 @@ void createModelsHeader(cellmlFilesList* list, string path)
 
 	printGetModelID(ofsh, list);
 	printFunction(ofsh,"int", "getNameId", "const char* variable, const char* component, const char** names, int namesLength",
-		"variable, component, names, namesLength", list);
+		"variable, component, names, namesLength", "-1", list);
 	
-	printFunction(ofsh,"double*", "getNewRatesArray", "", "", list);
-	printFunction(ofsh,"double*", "getNewStatesArray", "", "", list);
-	printFunction(ofsh,"double*", "getNewAlgebraicArray", "", "", list);
-	printFunction(ofsh,"double*", "getNewConstantsArray", "", "", list);
+	printFunction(ofsh,"double*", "getNewRatesArray", "", "", "NULL", list);
+	printFunction(ofsh,"double*", "getNewStatesArray", "", "", "NULL", list);
+	printFunction(ofsh,"double*", "getNewAlgebraicArray", "", "", "NULL", list);
+	printFunction(ofsh,"double*", "getNewConstantsArray", "", "", "NULL", list);
 	
 	printFunction(ofsh,"void", "getNewArrays", "double **constants, double **rates, double **states, double **algebraic", 
-		"constants, rates, states, algebraic", list);
+		"constants, rates, states, algebraic", "", list);
 	printFunction(ofsh,"void", "getVectorsLength", "int* algebraicLength, int* statesLength, int* constantsLength", 
-		"algebraicLength, statesLength, constantsLength", list);
+		"algebraicLength, statesLength, constantsLength", "", list);
 	printFunction(ofsh,"void", "names", "const char* &VoI, const char** constants, const char** rates, const char** states, const char** algebraic", 
-		"VoI, constants, rates, states, algebraic", list);
+		"VoI, constants, rates, states, algebraic", "", list);
 	printFunction(ofsh,"void", "initConsts", "double* constants, double* states", 
-		"constants, states", list);
+		"constants, states", "", list);
 	printFunction(ofsh,"void", "computeRates", "double VoI, double* constants, double* rates, double* states, double* algebraic", 
-		"VoI, constants, rates, states, algebraic", list);
+		"VoI, constants, rates, states, algebraic", "", list);
 	printFunction(ofsh,"void", "computeVariables", "double VoI, double* constants, double* rates, double* states, double* algebraic", 
-		"VoI, constants, rates, states, algebraic", list);
+		"VoI, constants, rates, states, algebraic", "", list);
 
 	ofsh.close();
 }
