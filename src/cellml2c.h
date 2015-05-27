@@ -167,11 +167,11 @@ void printCommentHeaderIndividualFile(wofstream &wofs, wstring prefix)
 	wofs << "//      Electrophysiologycal Models                                     " << endl;
 	wofs << "//      Networking colaboration                                         " << endl;
 	wofs << "//      In Silico research                                              " << endl;
-	wofs << "//      Sharing Knowledge		                                        " << endl;
+	wofs << "//      Sharing Knowledge		                                         " << endl;
 	wofs << "//                                                                      " << endl;
 	wofs << "//----------------------------------------------------------------------" << endl;
 	wofs << "//                                                                      " << endl;
-	wofs << "// -- C File of the "<< prefix << " model created for the DENIS Project -- " << endl;
+	wofs << "// -- C File of the " << prefix << " model created for the DENIS Project -- " << endl;
 	wofs << "//                                                                      " << endl;
 	wofs << "// This file has been automatically created using the CellML API.       " << endl;
 	wofs << "//                                                                      " << endl;
