@@ -121,7 +121,7 @@ void printCommentHeaderMainFile(ofstream &ofs)
 	ofs << "//      Electrophysiologycal Models                                     " << endl;
 	ofs << "//      Networking colaboration                                         " << endl;
 	ofs << "//      In Silico research                                              " << endl;
-	ofs << "//      Sharing Knowledge		                                        " << endl;
+	ofs << "//      Sharing Knowledge	                                        " << endl;
 	ofs << "//                                                                      " << endl;
 	ofs << "//----------------------------------------------------------------------" << endl;
 	ofs << "//                                                                      " << endl;
@@ -167,7 +167,7 @@ void printCommentHeaderIndividualFile(wofstream &wofs, wstring prefix)
 	wofs << "//      Electrophysiologycal Models                                     " << endl;
 	wofs << "//      Networking colaboration                                         " << endl;
 	wofs << "//      In Silico research                                              " << endl;
-	wofs << "//      Sharing Knowledge		                                         " << endl;
+	wofs << "//      Sharing Knowledge	                                         " << endl;
 	wofs << "//                                                                      " << endl;
 	wofs << "//----------------------------------------------------------------------" << endl;
 	wofs << "//                                                                      " << endl;
