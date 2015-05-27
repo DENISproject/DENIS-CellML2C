@@ -214,17 +214,25 @@ double* states, double* algebraic, int* pret)
 	
 	int getNameId(const char* variable, const char* component, const char** names, int namesLength){
 		int index = -1;
+		int counter = 0;
 		string completName(variable);
 		completName += " in component ";
 		completName += component;
 		for(int i=0; i &lt; namesLength; i++){
 			if(strncmp(completName.c_str(), names[i], completName.length())==0){
 				index = i;
-				break;
+				counter++;
 			}
 		}
 		
-		return index;
+		switch(counter){
+			case 1:
+				return index;
+			case 0:
+				return -1;
+			default:
+				return -counter;
+		}
 	}
 		
 </mapping>

@@ -259,6 +259,7 @@ void printGetModelID(ofstream &ofs,cellmlFilesList* list)
 		ofs << "\t\treturn " << iterator->name << "_ID;" << endl;
 		iterator=iterator->next;
 	}
+	ofs << "\treturn -1;" << endl;
 	ofs << "}" << endl;
 	ofs << endl;
 	
@@ -279,6 +280,8 @@ void printFunction(ofstream &ofs, string functionType,string functionName, strin
 		ofs << "\t\treturn " <<iterator->name << "::" << functionName << "(" << paramtersNames << ");" <<endl;
 		iterator=iterator->next;
 	}
+	ofs << "\tdefault:" << endl;
+	ofs << "\t\tfprintf(stderr, \"Model not implemented\\n\");" << endl;
 	
 	ofs << "\t}" << endl;
 	ofs << "}" << endl;
