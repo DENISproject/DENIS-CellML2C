@@ -185,14 +185,14 @@ double* states, double* algebraic, int* pret)
 
 <dictionary>
 <mapping keyname="preAlgebraicCount">
-	#define ALGEBRAIC_LENGTH </mapping>
-<mapping keyname="postAlgebraicCount">
+	const int ALGEBRAIC_LENGTH = </mapping>
+<mapping keyname="postAlgebraicCount">;
 </mapping>
-<mapping keyname="preStateCount">	#define STATE_LENGTH </mapping>
-<mapping keyname="postStateCount">
+<mapping keyname="preStateCount">	const int STATE_LENGTH = </mapping>
+<mapping keyname="postStateCount">;
 </mapping>
-<mapping keyname="preConstantCount">	#define CONSTANT_LENGTH </mapping>
-<mapping keyname="postConstantCount"> 
+<mapping keyname="preConstantCount">	const int CONSTANT_LENGTH = </mapping>
+<mapping keyname="postConstantCount">; 
 
 	double* getNewConstantsArray(){return new double[CONSTANT_LENGTH];}
 	double* getNewRatesArray(){return new double[STATE_LENGTH];}
@@ -256,11 +256,11 @@ double* states, double* algebraic, int* pret)
 </mapping>
   <mapping keyname="postVarList">	}
 </mapping>
-<mapping keyname="varListA">		</mapping>
-<mapping keyname="varListB">  = "</mapping>
+<mapping keyname="varListA"> 		</mapping>
+<mapping keyname="varListB"> = "</mapping>
 <mapping keyname="varListC">";</mapping>
-<mapping keyname="variablesA">	</mapping>
-<mapping keyname="variablesB">  = "</mapping>
+<mapping keyname="variablesA"> 	</mapping>
+<mapping keyname="variablesB"> = "</mapping>
 <mapping keyname="variablesC">";</mapping>
 </dictionary>
 
