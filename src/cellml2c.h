@@ -204,12 +204,43 @@ void printCommentHeaderIndividualFile(wofstream &wofs, wstring prefix)
 	wofs << endl;
 }
 
+wstring addInitDependentConstsFunction(wstring ws) {
+	size_t positionFunction = ws.find(L"void initConsts(double* constants, double* states){");
+	size_t lineEnd = ws.find(L"\n", positionFunction + 1);
+	size_t nextLine = ws.find(L"\n", lineEnd + 1);
+	size_t firstConstantInLine = ws.find(L"constants[", lineEnd + 1);
+	size_t endFunction = ws.find(L"}", positionFunction + 1);
+
+	bool lineFound = false;
+
+	while (nextLine < endFunction) {
+		size_t nextConstant = ws.find(L"constants[", firstConstantInLine + 1);
+		if (nextConstant < nextLine) {
+			ws.insert(lineEnd + 1, L"\t}\n\n\tvoid initDependentConsts(double* constants){\n");
+			lineFound = true;
+			break;
+		}
+
+		lineEnd = nextLine;
+		nextLine = ws.find(L"\n", lineEnd + 1);
+		firstConstantInLine = ws.find(L"constants[", lineEnd + 1);
+
+	}
+
+	if (!lineFound)
+		ws.insert(endFunction + 1, L"\n\t}\n\n\tvoid initDependentConsts(double* constants){}\n");
+
+	return ws;
+}
+
 void saveModel(const char* file, wstring code, wstring prefix){
+
+        wstring newCode = addInitDependentConstsFunction(code);
 	cout << file << endl;
 	wofstream wofs(file);
 	printCommentHeaderIndividualFile(wofs, prefix);
 	wofs << "namespace " << prefix << "{" << endl;
-	wofs << code << endl;
+	wofs << newCode << endl;
 	wofs << "};" << endl;
 	
 	wofs.close();
@@ -330,6 +361,8 @@ void createModelsHeader(cellmlFilesList* list, string path)
 		"VoI, constants, rates, states, algebraic", "", list);
 	printFunction(ofsh,"void", "initConsts", "double* constants, double* states", 
 		"constants, states", "", list);
+	printFunction(ofsh,"void", "initDependentConsts", "double* constants", 
+		"constants", "", list);
 	printFunction(ofsh,"void", "computeRates", "double VoI, double* constants, double* rates, double* states, double* algebraic", 
 		"VoI, constants, rates, states, algebraic", "", list);
 	printFunction(ofsh,"void", "computeVariables", "double VoI, double* constants, double* rates, double* states, double* algebraic", 
