@@ -228,7 +228,7 @@ wstring addInitDependentConstsFunction(wstring ws) {
 	}
 
 	if (!lineFound)
-		ws.insert(endFunction + 1, L"\n\t}\n\n\tvoid initDependentConsts(double* constants){}\n");
+		ws.insert(endFunction + 1, L"\n\n\tvoid initDependentConsts(double* constants){}\n");
 
 	return ws;
 }
